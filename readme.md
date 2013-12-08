@@ -1,8 +1,8 @@
 # AngularJS generator [![Build Status](https://secure.travis-ci.org/yeoman/generator-angular.png?branch=master)](http://travis-ci.org/yeoman/generator-angular)
 
-Maintainer: [Brian Ford](https://github.com/btford)
+# Maintainer: [](https://github.com/)
 
-Based on [angular-seed](https://github.com/angular/angular-seed/)
+Based on [generator-angular](https://github.com/yeoman/generator-angular/)
 
 
 ## Usage
