@@ -1,6 +1,6 @@
 # AngularJS generator [![Build Status](https://secure.travis-ci.org/yeoman/generator-angular.png?branch=master)](http://travis-ci.org/yeoman/generator-angular)
 
-# Maintainer: [](https://github.com/)
+Maintainer: [Kamil Jastrzębski](https://github.com/codigo-pl)
 
 Based on [generator-angular](https://github.com/yeoman/generator-angular/)
 
