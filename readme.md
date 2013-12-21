@@ -293,7 +293,7 @@ angular.module('myMod').service('myService', function () {
 });
 ```
 
-You can also do `yo angular:factory`, `yo angular:provider`, `yo angular:value`, and `yo angular:constant` for other types of services.
+You can also do `yo angular-feature:factory`, `yo angular-feature:provider`, `yo angular-feature:value`, and `yo angular-feature:constant` for other types of services.
 
 ### Decorator
 Generates an AngularJS service decorator.
