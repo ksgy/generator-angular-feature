@@ -32,11 +32,3 @@ Generator.prototype.askForStructureType = function askForStructureType() {
     cb();
   }.bind(this));
 };
-
-/*Generator.prototype.setupEnv = function setupEnv() {
-  // Copies the contents of the generator `templates`
-  // directory into your users new application path
-  this.sourceRoot(path.join(__dirname, '../templates/common'));
-  this.directory('root', '.', true);
-  this.copy('gitignore', '.gitignore');
-};*/
