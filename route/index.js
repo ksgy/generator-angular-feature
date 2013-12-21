@@ -3,12 +3,23 @@ var path = require('path');
 var util = require('util');
 var ScriptBase = require('../script-base.js');
 var angularUtils = require('../util.js');
+var Config = require('../config.js');
 
 
 var Generator = module.exports = function Generator() {
   ScriptBase.apply(this, arguments);
-  this.hookFor('angular:controller');
-  this.hookFor('angular:view');
+
+  // Get configuration
+  if (typeof(this.options['config']) === 'undefined')
+    this.configObj = Config.getConfig({
+      path: '',
+      file: 'config.json'
+    });
+  else
+    this.configObj = this.options['config'];
+
+  this.hookFor('angular-feature:controller');
+  this.hookFor('angular-feature:view');
 };
 
 util.inherits(Generator, ScriptBase);
@@ -18,11 +29,12 @@ Generator.prototype.rewriteAppJs = function () {
   var config = {
     file: path.join(
       this.env.options.appPath,
-      'scripts/app.' + (coffee ? 'coffee' : 'js')
+      this.configObj.source.path,
+      'app.' + (coffee ? 'coffee' : 'js')
     ),
     needle: '.otherwise',
     splicable: [
-      "  templateUrl: 'views/" + this.name.toLowerCase() + ".html'" + (coffee ? "" : "," ),
+      "  templateUrl: '" + this.configObj.view.path + "/" + this.name.toLowerCase() + ".html'" + (coffee ? "" : "," ),
       "  controller: '" + this.classedName + "Ctrl'"
     ]
   };

@@ -1,10 +1,20 @@
 'use strict';
 var util = require('util');
 var ScriptBase = require('../script-base.js');
+var Config = require('../config.js');
 
 
 var Generator = module.exports = function Generator() {
   ScriptBase.apply(this, arguments);
+
+  // Get configuration
+  if (typeof(this.options['config']) === 'undefined')
+  this.config = Config.getConfig({
+    path: '',
+    file: 'config.json'
+  });
+  else
+    this.config = this.options['config'];
 
   // if the controller name is suffixed with ctrl, remove the suffix
   // if the controller name is just "ctrl," don't append/remove "ctrl"
@@ -19,7 +29,7 @@ Generator.prototype.createControllerFiles = function createControllerFiles() {
   this.generateSourceAndTest(
     'controller',
     'spec/controller',
-    'controllers',
+    this.config.controller.path,
     this.options['skip-add'] || false
   );
 };

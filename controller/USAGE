@@ -4,5 +4,20 @@ Description:
 Example:
     yo angular:controller Thing [--coffee] [--minsafe]
 
-    This will create:
+    This will create (division by component):
         app/scripts/controllers/thing-ctrl.js
+
+    or (division by feature):
+    	app/src/common/controllers/thing-ctrl.js
+
+
+    yo angular:controller foo/Thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/controllers/thing-ctrl.js
+
+
+    yo angular:controller foo/bar/Thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/bar/controllers/thing-ctrl.js

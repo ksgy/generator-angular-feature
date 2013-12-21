@@ -2,9 +2,9 @@ Description:
     Creates a default AngularJS app
 
 Example:
-    yo angular [--coffee] [--minsafe]
+    yo angular-feature [--coffee] [--minsafe]
 
-    This will create:
+    This will create (division by component):
         Gruntfile.js
         bower.json
 
@@ -17,3 +17,20 @@ Example:
 
         test/lib/angular-mocks.js
         test/spec/controllers/main.js
+
+    or (division by feature):
+        Gruntfile.js
+        bower.json
+
+        app/src/common/views/index.html
+        app/src/common/your-app-name-here.js
+        app/src/common/controllers/main.js
+        app/src/vendor/bower_components/angular/angular.js
+        app/src/common/assets/styles/main.css
+        app/src/common/views/main.html
+
+        app/src/common/test/lib/angular-mocks.js
+        app/src/common/test/spec/controllers/main.js
+
+    Paths can by changed in a config.json file.
+

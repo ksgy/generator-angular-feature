@@ -2,7 +2,22 @@ Description:
     Creates a new AngularJS decorator for a specified service
 
 Example:
-    yo angular:decorator serviceName [--coffee]
+    yo angular-feature:decorator serviceName [--coffee]
 
-    This will create:
+    This will create (division by component):
         app/scripts/decorators/serviceNameDecorator.js
+
+    or (division by feature):
+    	app/src/common/decorators/serviceNameDecorator.js
+
+
+    yo angular-feature:decorator foo/serviceName [--coffee]
+
+    This will create (division by feature):
+        app/src/foo/decorators/serviceNameDecorator.js
+
+
+    yo angular-feature:decorator foo/bar/serviceName [--coffee]
+
+    This will create (division by feature):
+        app/src/foo/bar/decorators/serviceNameDecorator.js

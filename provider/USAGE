@@ -3,7 +3,25 @@ Description:
     Docs: http://docs.angularjs.org/guide/dev_guide.services.creating_services
 
 Example:
-    yo angular:provider thing [--coffee] [--minsafe]
+    yo angular-feature:provider thing [--coffee] [--minsafe]
 
     This will create:
         app/scripts/services/thing.js
+
+    This will create (division by component):
+        app/scripts/services/thing.js
+
+    or (division by feature):
+    	app/src/common/services/thing.js
+
+
+    yo angular-feature:provider foo/thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/services/thing.js
+
+
+    yo angular-feature:provider foo/bar/thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/bar/services/thing.js

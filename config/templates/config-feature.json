@@ -9,7 +9,7 @@
           "path": "common"
         },
         "feature": {
-          "path": "{feature}",
+          "path": "{{feature}}",
           "assets": {
             "path": "assets",
             "fonts": {

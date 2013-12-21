@@ -3,7 +3,22 @@ Description:
     Docs: http://docs.angularjs.org/guide/dev_guide.services.creating_services
 
 Example:
-    yo angular:service thing [--coffee] [--minsafe]
+    yo angular-feature:service thing [--coffee] [--minsafe]
 
-    This will create:
+    This will create (division by component):
         app/scripts/services/thing.js
+
+    or (division by feature):
+    	app/src/common/services/thing.js
+
+
+    yo angular-feature:service foo/thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/services/thing.js
+
+
+    yo angular-feature:service foo/bar/thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/bar/services/thing.js

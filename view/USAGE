@@ -2,7 +2,22 @@ Description:
     Creates a new AngularJS view
 
 Example:
-    yo angular:view thing
+    yo angular-feature:view thing
 
-    This will create:
+    This will create (division by component):
         app/views/thing.html
+
+    or (division by feature):
+    	app/src/common/views/thing.html
+
+
+    yo angular-feature:view foo/thing
+
+    This will create (division by feature):
+        app/src/foo/views/thing.html
+
+
+    yo angular-feature:view foo/bar/thing
+
+    This will create (division by feature):
+        app/src/foo/bar/views/thing.html

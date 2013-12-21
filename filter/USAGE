@@ -2,7 +2,22 @@ Description:
     Creates a new AngularJS filter
 
 Example:
-    yo angular:filter thing [--coffee] [--minsafe]
+    yo angular-feature:filter thing [--coffee] [--minsafe]
 
-    This will create:
+    This will create (division by component):
         app/scripts/filters/thing.js
+
+    or (division by feature):
+    	app/src/common/filters/thing.js
+
+
+    yo angular-feature:filter foo/thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/filters/thing.js
+
+
+    yo angular-feature:filter foo/bar/thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/bar/filters/thing.js

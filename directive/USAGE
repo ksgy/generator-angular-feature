@@ -2,7 +2,25 @@ Description:
     Creates a new Angular directive
 
 Example:
-    yo angular:directive thing [--coffee] [--minsafe]
+    yo angular-feature:directive thing [--coffee] [--minsafe]
 
     This will create:
         app/scripts/directives/thing.js
+
+    This will create (division by component):
+        app/scripts/directives/thing.js
+
+    or (division by feature):
+    	app/src/common/directives/thing.js
+
+
+    yo angular-feature:directive foo/thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/directives/thing.js
+
+
+    yo angular-feature:directive foo/bar/thing [--coffee] [--minsafe]
+
+    This will create (division by feature):
+        app/src/foo/bar/directives/thing.js

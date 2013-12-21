@@ -3,9 +3,19 @@ var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 var angularUtils = require('./util.js');
+var Config = require('./config.js');
 
 var Generator = module.exports = function Generator() {
   yeoman.generators.NamedBase.apply(this, arguments);
+
+  // Get configuration
+  if (typeof(this.options['config']) === 'undefined')
+  this.config = Config.getConfig({
+    path: '',
+    file: 'config.json'
+  });
+  else
+    this.config = this.options['config'];
 
   try {
     this.appname = require(path.join(process.cwd(), 'bower.json')).name;
@@ -22,14 +32,16 @@ var Generator = module.exports = function Generator() {
     try {
       this.env.options.appPath = require(path.join(process.cwd(), 'bower.json')).appPath;
     } catch (e) {}
-    this.env.options.appPath = this.env.options.appPath || 'app';
+    this.env.options.appPath = this.env.options.appPath || this.config.app.path || 'app';
   }
 
   if (typeof this.env.options.testPath === 'undefined') {
     try {
       this.env.options.testPath = require(path.join(process.cwd(), 'bower.json')).testPath;
     } catch (e) {}
-    this.env.options.testPath = this.env.options.testPath || 'test/spec';
+    this.env.options.testPath = this.env.options.testPath ||
+        path.join(this.config.test.path, 'spec') ||
+        'test/spec';
   }
 
   this.env.options.coffee = this.options.coffee;
@@ -97,7 +109,7 @@ Generator.prototype.addScriptToIndex = function (script) {
       file: fullPath,
       needle: '<!-- endbuild -->',
       splicable: [
-        '<script src="scripts/' + script.replace('\\', '/') + '.js"></script>'
+        '<script src="' + path.join(this.config.source.path, script.replace('\\', '/') + '.js') + '"></script>'
       ]
     });
   } catch (e) {
@@ -111,7 +123,7 @@ Generator.prototype.generateSourceAndTest = function (appTemplate, testTemplate,
     this.cameledName = this.classedName;
   }
 
-  this.appTemplate(appTemplate, path.join('scripts', targetDirectory, this.name));
+  this.appTemplate(appTemplate, path.join(this.config.source.path, targetDirectory, this.name));
   this.testTemplate(testTemplate, path.join(targetDirectory, this.name));
   if (!skipAdd) {
     this.addScriptToIndex(path.join(targetDirectory, this.name));
