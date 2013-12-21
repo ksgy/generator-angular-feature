@@ -1,0 +1,59 @@
+{
+  "structure": {
+    "type": "component",
+    "app": {
+      "path": "app",
+      "assets": {
+        "path": ""
+      },
+      "fonts": {
+        "path": "fonts"
+      },
+      "images": {
+        "path": "images"
+      },
+      "source": {
+        "path": "scripts",
+        "common": {
+          "path": ""
+        },
+        "controller": {
+          "path": "controllers"
+        },
+        "decorator": {
+          "path": "decorators"
+        },
+        "directive": {
+          "path": "directives"
+        },
+        "factory": {
+          "path": "[service]"
+        },
+        "filter": {
+          "path": "filters"
+        },
+        "provider": {
+          "path": "[service]"
+        },
+        "service": {
+          "path": "services"
+        },
+        "value": {
+          "path": "[service]"
+        }
+      },
+      "styles": {
+        "path": "styles"
+      },
+      "vendor": {
+        "path": ""
+      },
+      "view": {
+        "path": "views"
+      }
+    },
+    "test": {
+      "path": "test"
+    }
+  }
+}
