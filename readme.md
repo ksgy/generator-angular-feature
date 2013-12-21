@@ -30,18 +30,19 @@ Run `grunt` for building and `grunt serve` for preview
 
 Available generators:
 
-* [angular](#app) (aka [angular:app](#app))
-* [angular:controller](#controller)
-* [angular:directive](#directive)
-* [angular:filter](#filter)
-* [angular:route](#route)
-* [angular:service](#service)
-* [angular:provider](#service)
-* [angular:factory](#service)
-* [angular:value](#service)
-* [angular:constant](#service)
-* [angular:decorator] (#decorator)
-* [angular:view](#view)
+* [angular-feature](#app) (aka [angular-feature:app](#app))
+* [angular-feature:config](#config)
+* [angular-feature:controller](#controller)
+* [angular-feature:directive](#directive)
+* [angular-feature:filter](#filter)
+* [angular-feature:route](#route)
+* [angular-feature:service](#service)
+* [angular-feature:provider](#service)
+* [angular-feature:factory](#service)
+* [angular-feature:value](#service)
+* [angular-feature:constant](#service)
+* [angular-feature:decorator] (#decorator)
+* [angular-feature:view](#view)
 
 **Note: Generators are to be run from the root directory of your app.**
 
@@ -50,15 +51,154 @@ Sets up a new AngularJS app, generating all the boilerplate you need to get star
 
 Example:
 ```bash
-yo angular
+yo angular-feature
 ```
+### Config
+Creates a config file with choosen application structure in the root directory of your app.
+
+Example:
+```bash
+yo angular-feature:config
+```
+
+Produces `config.json` (division by component):
+```json
+{
+  "structure": {
+    "type": "component",
+    "app": {
+      "path": "app",
+      "assets": {
+        "path": ""
+      },
+      "fonts": {
+        "path": "fonts"
+      },
+      "images": {
+        "path": "images"
+      },
+      "source": {
+        "path": "scripts",
+        "common": {
+          "path": ""
+        },
+        "controller": {
+          "path": "controllers"
+        },
+        "decorator": {
+          "path": "decorators"
+        },
+        "directive": {
+          "path": "directives"
+        },
+        "factory": {
+          "path": "[service]"
+        },
+        "filter": {
+          "path": "filters"
+        },
+        "provider": {
+          "path": "[service]"
+        },
+        "service": {
+          "path": "services"
+        },
+        "value": {
+          "path": "[service]"
+        }
+      },
+      "styles": {
+        "path": "styles"
+      },
+      "vendor": {
+        "path": ""
+      },
+      "view": {
+        "path": "views"
+      }
+    },
+    "test": {
+      "path": "test"
+    }
+  }
+}
+```
+or config.json (division by feature):
+```json
+{
+  "structure": {
+    "type": "feature",
+    "app": {
+      "path": "app",
+      "source": {
+        "path": "src",
+        "common": {
+          "path": "common"
+        },
+        "feature": {
+          "path": "{{feature}}",
+          "assets": {
+            "path": "assets",
+            "fonts": {
+              "path": "fonts"
+            },
+            "images": {
+              "path": "images"
+            },
+            "styles": {
+              "path": "styles"
+            }
+          },
+          "controller": {
+            "path": "controllers"
+          },
+          "decorator": {
+            "path": "decorators"
+          },
+          "directive": {
+            "path": "directives"
+          },
+          "factory": {
+            "path": "[service]"
+          },
+          "filter": {
+            "path": "filters"
+          },
+          "provider": {
+            "path": "[service]"
+          },
+          "service": {
+            "path": "services"
+          },
+          "test": {
+            "path": "tests"
+          },
+          "value": {
+            "path": "[service]"
+          },
+          "view": {
+            "path": "views"
+          }
+        },
+        "vendor": {
+          "path": "vendor"
+        }
+      }
+    }
+  }
+}
+```
+
+Path value within a square brackets is a reference, e.g. path for 'factory' component will be 'services'.
+Path value '{{feature}}' is replaced by a feature name during execution of subgenerator (e.g. angular-feature:controller) or by a 'common' value, when no feature is given.
+Full path for the component is calculated based on nesting, e.g. 'app/src/{{feature}}/controllers' for a controller in a project divided by feature.
 
 ### Route
 Generates a controller and view, and configures a route in `app/scripts/app.js` connecting them.
 
 Example:
 ```bash
-yo angular:route myroute
+yo angular-feature:route myroute
 ```
 
 Produces `app/scripts/controllers/myroute.js`:
@@ -78,7 +218,7 @@ Generates a controller in `app/scripts/controllers`.
 
 Example:
 ```bash
-yo angular:controller user
+yo angular-feature:controller user
 ```
 
 Produces `app/scripts/controllers/user.js`:
@@ -92,7 +232,7 @@ Generates a directive in `app/scripts/directives`.
 
 Example:
 ```bash
-yo angular:directive myDirective
+yo angular-feature:directive myDirective
 ```
 
 Produces `app/scripts/directives/myDirective.js`:
@@ -113,7 +253,7 @@ Generates a filter in `app/scripts/filters`.
 
 Example:
 ```bash
-yo angular:filter myFilter
+yo angular-feature:filter myFilter
 ```
 
 Produces `app/scripts/filters/myFilter.js`:
@@ -130,7 +270,7 @@ Generates an HTML view file in `app/views`.
 
 Example:
 ```bash
-yo angular:view user
+yo angular-feature:view user
 ```
 
 Produces `app/views/user.html`:
@@ -143,7 +283,7 @@ Generates an AngularJS service.
 
 Example:
 ```bash
-yo angular:service myService
+yo angular-feature:service myService
 ```
 
 Produces `app/scripts/services/myService.js`:
@@ -160,7 +300,7 @@ Generates an AngularJS service decorator.
 
 Example:
 ```bash
-yo angular:decorator serviceName
+yo angular-feature:decorator serviceName
 ```
 
 Produces `app/scripts/decorators/serviceNameDecorator.js`:
@@ -181,7 +321,7 @@ For generators that output scripts, the `--coffee` option will output CoffeeScri
 
 For example:
 ```bash
-yo angular:controller user --coffee
+yo angular-feature:controller user --coffee
 ```
 
 Produces `app/scripts/controller/user.coffee`:
@@ -205,7 +345,7 @@ By default, generators produce unannotated code. Without annotations, AngularJS'
 
 #### Example
 ```bash
-yo angular:controller user --minsafe
+yo angular-feature:controller user --minsafe
 ```
 
 Produces `app/controller/user.js`:
@@ -262,7 +402,7 @@ By default, new scripts are added to the index.html file. However, this may not 
 
 To skip adding them to the index, pass in the skip-add argument:
 ```bash
-yo angular:service serviceName --skip-add
+yo angular-feature:service serviceName --skip-add
 ```
 
 ## Bower Components
