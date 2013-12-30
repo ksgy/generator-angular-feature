@@ -23,7 +23,7 @@ Generator.prototype.createDirectiveFiles = function createDirectiveFiles() {
   this.generateSourceAndTest(
     'directive',
     'spec/directive',
-    this.config.directive.path,
+    'directive',
     this.options['skip-add'] || false
   );
 };

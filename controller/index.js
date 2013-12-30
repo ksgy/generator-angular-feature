@@ -2,6 +2,7 @@
 var util = require('util');
 var ScriptBase = require('../script-base.js');
 var Config = require('../config.js');
+var Feature = require('../feature.js');
 
 
 var Generator = module.exports = function Generator() {
@@ -9,12 +10,16 @@ var Generator = module.exports = function Generator() {
 
   // Get configuration
   if (typeof(this.options['config']) === 'undefined')
-  this.config = Config.getConfig({
-    path: '',
-    file: 'config.json'
-  });
+    this.config = Config.getConfig({
+      path: '',
+      file: 'config.json'
+    });
   else
     this.config = this.options['config'];
+
+  this.featureParams = this.options['featureParams'] ||
+      Feature.getParameters(this.name, this.config.common.path);
+  this.name = this.featureParams.basename;
 
   // if the controller name is suffixed with ctrl, remove the suffix
   // if the controller name is just "ctrl," don't append/remove "ctrl"
@@ -29,7 +34,8 @@ Generator.prototype.createControllerFiles = function createControllerFiles() {
   this.generateSourceAndTest(
     'controller',
     'spec/controller',
-    this.config.controller.path,
+    'controller',
+    this.featureParams.dirname,
     this.options['skip-add'] || false
   );
 };

@@ -25,7 +25,7 @@ Generator.prototype.askForOverwrite = function askForOverwrite() {
   var cb = this.async();
 
   // TODO: Any yeoman.util function to handle this?
-  var fileExists = fs.existsSync(this.env.cwd + path.join('/', this.config.app.path, this.config.source.path) + buildRelativePath(this.fileName) + ".js");
+  var fileExists = fs.existsSync(this.env.cwd + path.join('/', this.config.source.fullPath) + buildRelativePath(this.fileName) + ".js");
   if (fileExists) {
     var prompts = [{
       type: 'confirm',
@@ -69,10 +69,10 @@ Generator.prototype.askForNewName = function askForNewName() {
 };
 
 Generator.prototype.createDecoratorFiles = function createDecoratorFiles() {
-  this.appTemplate('decorator', path.join(this.config.source.path, buildRelativePath(this.fileName)));
+  this.appTemplate('decorator', buildRelativePath(this.fileName));
   this.addScriptToIndex(buildRelativePath(this.fileName));
 };
 
 function buildRelativePath(fileName){
-  return path.join(this.config.decorator.path, fileName + "Decorator");
+  return path.join(this.config.decorator.fullPath, fileName + "Decorator");
 }

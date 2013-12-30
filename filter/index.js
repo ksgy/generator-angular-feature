@@ -23,7 +23,7 @@ Generator.prototype.createFilterFiles = function createFilterFiles() {
   this.generateSourceAndTest(
     'filter',
     'spec/filter',
-    this.config.filter.path,
+    'filter',
     this.options['skip-add'] || false
   );
 };

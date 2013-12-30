@@ -21,37 +21,38 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: {
       // configurable paths
-      app: require('./bower.json').appPath || '<%=config.app.path%>' || 'app',
+      // Application path will be read from config.json file (this.config.app.path).
+      app: '<%= config.app.path %>',
       dist: 'dist'
     },
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {<% if (coffee) { %>
       coffee: {
-        files: ['<%%= yeoman.app %>/scripts/{,*/}*.{coffee,litcoffee,coffee.md}'],
+        files: ['<%= config.source.fullPath %>/{,*/}*.{coffee,litcoffee,coffee.md}'],
         tasks: ['newer:coffee:dist']
       },
       coffeeTest: {
-        files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
+        files: ['<%= config.test.fullPath.replace(/\{\{feature\}\}/, '**') %>/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
         tasks: ['newer:coffee:test', 'karma']
       },<% } else { %>
       js: {
-        files: ['<%%= yeoman.app %>/<%=config.source.path%>/{,*/}*.js'],
+        files: ['<%= config.source.fullPath %>/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: true
         }
       },
       jsTest: {
-        files: ['test/spec/{,*/}*.js'],
+        files: ['<%= config.test.fullPath.replace(/\{\{feature\}\}/, '**') %>/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
       },<% } %><% if (compass) { %>
       compass: {
-        files: ['<%%= yeoman.app %>/<%=config.styles.path%>/{,*/}*.{scss,sass}'],
+        files: ['<%= config.styles.fullPath.replace(/\{\{feature\}\}/, '**') %>/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },<% } else { %>
       styles: {
-        files: ['<%%= yeoman.app %>/<%=config.styles.path%>/{,*/}*.css'],
+        files: ['<%= config.styles.fullPath.replace(/\{\{feature\}\}/, '**') %>/{,*/}*.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
       },<% } %>
       gruntfile: {
@@ -65,7 +66,7 @@ module.exports = function (grunt) {
           '<%%= yeoman.app %>/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',<% if (coffee) { %>
           '.tmp/scripts/{,*/}*.js',<% } %>
-          '<%%= yeoman.app %>/<%=config.images.path%>/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+          '<%= config.images.fullPath.replace(/\{\{feature\}\}/, '**') %>/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -112,13 +113,13 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js'<% if (!coffee) { %>,
-        '<%%= yeoman.app %>/<%=config.source.path%>/{,*/}*.js'<% } %>
+        '<%= config.source.fullPath %>/{,*/}*.js'<% } %>
       ]<% if (!coffee) { %>,
       test: {
         options: {
-          jshintrc: '<%=config.test.path%>/.jshintrc'
+          jshintrc: '.jshintrc'
         },
-        src: ['<%=config.test.path%>/spec/{,*/}*.js']
+        src: ['<%= config.test.fullPath.replace(/\{\{feature\}\}/, '**') %>/spec/{,*/}*.js']
       }<% } %>
     },
 
@@ -170,7 +171,7 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%=config.source.path%>',
+          cwd: '<%= config.source.fullPath %>',
           src: '{,*/}*.coffee',
           dest: '.tmp/scripts',
           ext: '.js'
@@ -179,7 +180,7 @@ module.exports = function (grunt) {
       test: {
         files: [{
           expand: true,
-          cwd: 'test/spec',
+          cwd: '<%= config.test.fullPath.replace(/\{\{feature\}\}/, '**') %>/spec',
           src: '{,*/}*.coffee',
           dest: '.tmp/spec',
           ext: '.js'
@@ -191,13 +192,13 @@ module.exports = function (grunt) {
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
-        sassDir: '<%%= yeoman.app %>/<%=config.styles.path%>',
+        sassDir: '<%= config.styles.fullPath.replace(/\{\{feature\}\}/, '**') %>',
         cssDir: '.tmp/styles',
         generatedImagesDir: '.tmp/images/generated',
-        imagesDir: '<%%= yeoman.app %>/<%=config.images.path%>',
-        javascriptsDir: '<%%= yeoman.app %>/<%=config.source.path%>',
-        fontsDir: '<%%= yeoman.app %>/<%=config.styles.path%>/<%=config.fonts.path%>',
-        importPath: '<%%= yeoman.app %>/bower_components',
+        imagesDir: '<%= config.images.fullPath.replace(/\{\{feature\}\}/, '**') %>',
+        javascriptsDir: '<%= config.source.fullPath %>',
+        fontsDir: '<%=config.fonts.fullPath.replace(/\{\{feature\}\}/, '**') %>',
+        importPath: '<%= config.vendor.fullPath.replace(/\{\{feature\}\}/, '**') %>/bower_components',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
@@ -254,7 +255,7 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%=config.images.path%>',
+          cwd: '<%= config.images.fullPath.replace(/\{\{feature\}\}/, '**') %>',
           src: '{,*/}*.{png,jpg,jpeg,gif}',
           dest: '<%%= yeoman.dist %>/images'
         }]
@@ -264,7 +265,7 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%=config.images.path%>',
+          cwd: '<%= config.images.fullPath.replace(/\{\{feature\}\}/, '**') %>',
           src: '{,*/}*.svg',
           dest: '<%%= yeoman.dist %>/images'
         }]
@@ -281,7 +282,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%%= yeoman.dist %>',
-          src: ['*.html', '<%=config.view.path%>/{,*/}*.html'],
+          src: ['*.html', '<%= config.view.path %>/{,*/}*.html'],
           dest: '<%%= yeoman.dist %>'
         }]
       }
@@ -313,16 +314,16 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%%= yeoman.app %>',
+          cwd: './',
           dest: '<%%= yeoman.dist %>',
           src: [
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            '<%=config.view.path%>/{,*/}*.html',
-            'bower_components/**/*',
-            '<%=config.images.path%>/{,*/}*.{webp}',
-            '<%=config.fonts.path%>/*'
+            '<%= config.view.fullPath.replace(/\{\{feature\}\}/, '**') %>/{,*/}*.html',
+            '<%= config.vendor.fullPath.replace(/\{\{feature\}\}/, '**') %>/bower_components/**/*',
+            '<%= config.images.fullPath.replace(/\{\{feature\}\}/, '**') %>/{,*/}*.{webp}',
+            '<%= config.fonts.fullPath.replace(/\{\{feature\}\}/, '**') %>/*'
           ]
         }, {
           expand: true,
@@ -333,7 +334,7 @@ module.exports = function (grunt) {
       },
       styles: {
         expand: true,
-        cwd: '<%%= yeoman.app %>/<%=config.styles.path%>',
+        cwd: '<%= config.styles.fullPath.replace(/\{\{feature\}\}/, '**') %>',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
       }

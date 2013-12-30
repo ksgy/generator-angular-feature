@@ -4,7 +4,8 @@ var util = require('util');
 var path = require('path');
 
 module.exports = {
-  getConfig: getConfig
+  getConfig: getConfig,
+  rewriteFile: rewriteFile
 };
 
 function getConfig(args) {
@@ -16,12 +17,24 @@ function getConfig(args) {
   else
     config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config/templates/config-component.json'), 'utf8'));
 
-  calculatePath(config, config['structure']);
+  calculateFullPath(config, config['structure']);
+  calculateAppPath(config, config['structure'].app);
   
   return config;
 }
 
-function calculatePath(rootNode, node, nodePath) {
+function rewriteFile(args) {
+  args.path = args.path || process.cwd();
+  var fullPath = path.join(args.path, args.file);
+  var file = fs.readFileSync(fullPath, 'utf8');
+
+  for (var key in args.map)
+    file = file.replace(new RegExp(escapeRegExp(key), 'g'), args.map[key]);
+
+  fs.writeFileSync(fullPath, file);
+};
+
+function calculateFullPath(rootNode, node, nodePath) {
   if (typeof(node) == 'object')
     for (var key in node) {
       if (typeof node[key].path !== 'undefined') {
@@ -29,7 +42,20 @@ function calculatePath(rootNode, node, nodePath) {
           rootNode[key] = {};
         rootNode[key].path = substitutePath(node, key);
         rootNode[key].fullPath = path.join((nodePath ? nodePath : ''), rootNode[key].path);
-        calculatePath(rootNode, node[key], rootNode[key].fullPath);
+        calculateFullPath(rootNode, node[key], rootNode[key].fullPath);
+      }
+    }
+}
+
+function calculateAppPath(rootNode, node, nodePath) {
+  if (typeof(node) == 'object')
+    for (var key in node) {
+      if (typeof node[key].path !== 'undefined') {
+        if (!rootNode[key])
+          rootNode[key] = {};
+        var _path = substitutePath(node, key);
+        rootNode[key].appPath = path.join((nodePath ? nodePath : ''), _path);
+        calculateAppPath(rootNode, node[key], rootNode[key].appPath);
       }
     }
 }
@@ -43,4 +69,8 @@ function substitutePath(node, key) {
   else {
     return node[key].path;
   }
+}
+
+function escapeRegExp (str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 }

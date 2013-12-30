@@ -1,0 +1,3 @@
+{
+    "directory": "<%= config.vendor.fullPath %>/bower_components"
+}

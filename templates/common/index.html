@@ -15,7 +15,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="<%= config.styles.appPath.replace(/\{\{feature\}\}/, config.common.path) %>/main.css">
     <!-- endbuild -->
   </head>
   <body ng-app="<%= scriptAppName %>">
@@ -27,7 +27,7 @@
     <% if (ngRoute) {
       %><div class="container" ng-view></div><%
     } else {
-      %><div class="container" ng-include="'<%=config.view.path%>/main.html'" ng-controller="MainCtrl"></div><%
+      %><div class="container" ng-include="'<%= config.view.appPath.replace(/\{\{feature\}\}/, config.common.path) %>/main.html'" ng-controller="MainCtrl"></div><%
     } %>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->

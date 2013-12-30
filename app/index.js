@@ -31,14 +31,15 @@ var Generator = module.exports = function Generator(args, options) {
 
   args = ['main'];
 
-  if (typeof this.env.options.appPath === 'undefined') {
+  // Application path will be read from config.json file (this.config.app.path).
+  /*if (typeof this.env.options.appPath === 'undefined') {
     try {
       this.env.options.appPath = require(path.join(process.cwd(), 'bower.json')).appPath;
     } catch (e) {}
     this.env.options.appPath = this.env.options.appPath || this.config.app.path || 'app';
   }
 
-  this.appPath = this.env.options.appPath;
+  this.appPath = this.env.options.appPath;*/
 
   if (typeof this.env.options.coffee === 'undefined') {
     this.option('coffee', {
@@ -48,7 +49,7 @@ var Generator = module.exports = function Generator(args, options) {
     // attempt to detect if user is using CS or not
     // if cml arg provided, use that; else look for the existence of cs
     if (!this.options.coffee &&
-      this.expandFiles(path.join(this.appPath, path.join(this.config.source.path, '**/*.coffee')), {}).length > 0) {
+      this.expandFiles(path.join(this.config.source.fullPath, '**/*.coffee'), {}).length > 0) {
       this.options.coffee = true;
     }
 
@@ -126,6 +127,15 @@ var Generator = module.exports = function Generator(args, options) {
       }
     });
 
+    Config.rewriteFile({
+      path: process.cwd(),
+      file: 'karma.conf.js',
+      map: {
+        'app/bower_components': path.join(this.config.vendor.fullPath, 'bower_components'),
+        'app/scripts': this.config.source.fullPath,
+        'test/': this.config.test.fullPath.replace(/\{\{feature\}\}/, '**') + '/'
+      }
+    });
   });
 
   this.pkg = require('../package.json');
@@ -260,13 +270,14 @@ Generator.prototype.bootstrapFiles = function bootstrapFiles() {
   var mainFile = 'main.' + (sass ? 's' : '') + 'css';
 
   if (this.bootstrap && !sass) {
-    this.copy('fonts/glyphicons-halflings-regular.eot', path.join(this.config.app.path, this.config.fonts.path, 'glyphicons-halflings-regular.eot'));
-    this.copy('fonts/glyphicons-halflings-regular.ttf', path.join(this.config.app.path, this.config.fonts.path, 'glyphicons-halflings-regular.ttf'));
-    this.copy('fonts/glyphicons-halflings-regular.svg', path.join(this.config.app.path, this.config.fonts.path, 'glyphicons-halflings-regular.svg'));
-    this.copy('fonts/glyphicons-halflings-regular.woff', path.join(this.config.app.path, this.config.fonts.path, 'glyphicons-halflings-regular.woff'));
+    var _path = this.config.fonts.fullPath.replace(/\{\{feature\}\}/, this.config.common.path);
+    this.copy('fonts/glyphicons-halflings-regular.eot', path.join(_path, 'glyphicons-halflings-regular.eot'));
+    this.copy('fonts/glyphicons-halflings-regular.ttf', path.join(_path, 'glyphicons-halflings-regular.ttf'));
+    this.copy('fonts/glyphicons-halflings-regular.svg', path.join(_path, 'glyphicons-halflings-regular.svg'));
+    this.copy('fonts/glyphicons-halflings-regular.woff', path.join(_path, 'glyphicons-halflings-regular.woff'));
   }
 
-  this.copy('styles/' + mainFile, path.join(this.appPath, this.config.styles.path, mainFile));
+  this.copy('styles/' + mainFile, path.join(this.config.styles.fullPath.replace(/\{\{feature\}\}/, this.config.common.path), mainFile));
 };
 
 Generator.prototype.appJs = function appJs() {
@@ -275,14 +286,14 @@ Generator.prototype.appJs = function appJs() {
     fileType: 'js',
     optimizedPath: path.join(this.config.source.path, 'scripts.js'),
     sourceFileList: [path.join(this.config.source.path, 'app.js'),
-        path.join(this.config.source.path, this.config.controller.path, 'main.js')],
-    searchPath: ['.tmp', this.appPath]
+        path.join(this.config.controller.appPath.replace(/\{\{feature\}\}/, this.config.common.path), 'main.js')],
+    searchPath: ['.tmp', this.config.app.path]
   });
 };
 
 Generator.prototype.createIndexHtml = function createIndexHtml() {
   this.indexFile = this.indexFile.replace(/&apos;/g, "'");
-  this.write(path.join(this.appPath, 'index.html'), this.indexFile);
+  this.write(path.join(this.config.app.path, 'index.html'), this.indexFile);
 };
 
 Generator.prototype.packageFiles = function () {
@@ -294,7 +305,7 @@ Generator.prototype.packageFiles = function () {
 
 Generator.prototype.imageFiles = function () {
   this.sourceRoot(path.join(__dirname, 'templates'));
-  this.directory('images', path.join(this.config.app.path, this.config.images.path), true);
+  this.directory('images', this.config.images.fullPath.replace(/\{\{feature\}\}/, this.config.common.path), true);
 };
 
 Generator.prototype._injectDependencies = function _injectDependencies() {
@@ -316,3 +327,4 @@ Generator.prototype._injectDependencies = function _injectDependencies() {
     });
   }
 };
+

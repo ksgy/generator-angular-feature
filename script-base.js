@@ -28,21 +28,23 @@ var Generator = module.exports = function Generator() {
   this.cameledName = this._.camelize(this.name);
   this.classedName = this._.classify(this.name);
 
-  if (typeof this.env.options.appPath === 'undefined') {
+  // Application path will be read from config.json file (this.config.app.path).
+  /*if (typeof this.env.options.appPath === 'undefined') {
     try {
       this.env.options.appPath = require(path.join(process.cwd(), 'bower.json')).appPath;
     } catch (e) {}
     this.env.options.appPath = this.env.options.appPath || this.config.app.path || 'app';
-  }
+  }*/
 
-  if (typeof this.env.options.testPath === 'undefined') {
+  // Test path will be read from config.json file (this.config.test.path).
+  /*if (typeof this.env.options.testPath === 'undefined') {
     try {
       this.env.options.testPath = require(path.join(process.cwd(), 'bower.json')).testPath;
     } catch (e) {}
     this.env.options.testPath = this.env.options.testPath ||
         path.join(this.config.test.path, 'spec') ||
         'test/spec';
-  }
+  }*/
 
   this.env.options.coffee = this.options.coffee;
   if (typeof this.env.options.coffee === 'undefined') {
@@ -51,7 +53,7 @@ var Generator = module.exports = function Generator() {
     // attempt to detect if user is using CS or not
     // if cml arg provided, use that; else look for the existence of cs
     if (!this.options.coffee &&
-      this.expandFiles(path.join(this.env.options.appPath, '/scripts/**/*.coffee'), {}).length > 0) {
+      this.expandFiles(path.join(this.config.app.path, '/scripts/**/*.coffee'), {}).length > 0) {
       this.options.coffee = true;
     }
 
@@ -83,33 +85,33 @@ util.inherits(Generator, yeoman.generators.NamedBase);
 Generator.prototype.appTemplate = function (src, dest) {
   yeoman.generators.Base.prototype.template.apply(this, [
     src + this.scriptSuffix,
-    path.join(this.env.options.appPath, dest.toLowerCase()) + this.scriptSuffix
+    dest.toLowerCase() + this.scriptSuffix
   ]);
 };
 
 Generator.prototype.testTemplate = function (src, dest) {
   yeoman.generators.Base.prototype.template.apply(this, [
     src + this.scriptSuffix,
-    path.join(this.env.options.testPath, dest.toLowerCase()) + this.scriptSuffix
+    dest.toLowerCase() + this.scriptSuffix
   ]);
 };
 
 Generator.prototype.htmlTemplate = function (src, dest) {
   yeoman.generators.Base.prototype.template.apply(this, [
     src,
-    path.join(this.env.options.appPath, dest.toLowerCase())
+    path.join(this.config.app.path, dest.toLowerCase())
   ]);
 };
 
 Generator.prototype.addScriptToIndex = function (script) {
   try {
-    var appPath = this.env.options.appPath;
+    var appPath = this.config.app.path;
     var fullPath = path.join(appPath, 'index.html');
     angularUtils.rewriteFile({
       file: fullPath,
       needle: '<!-- endbuild -->',
       splicable: [
-        '<script src="' + path.join(this.config.source.path, script.replace('\\', '/') + '.js') + '"></script>'
+        '<script src="' + script.replace('\\', '/') + '.js' + '"></script>'
       ]
     });
   } catch (e) {
@@ -117,15 +119,17 @@ Generator.prototype.addScriptToIndex = function (script) {
   }
 };
 
-Generator.prototype.generateSourceAndTest = function (appTemplate, testTemplate, targetDirectory, skipAdd) {
+Generator.prototype.generateSourceAndTest = function (appTemplate, testTemplate, componentType, feature, skipAdd) {
   // Services use classified names
   if (this.generatorName.toLowerCase() === 'service') {
     this.cameledName = this.classedName;
   }
-
-  this.appTemplate(appTemplate, path.join(this.config.source.path, targetDirectory, this.name));
-  this.testTemplate(testTemplate, path.join(targetDirectory, this.name));
+  this.appTemplate(appTemplate, path.join(this.config[componentType].fullPath.replace(/\{\{feature\}\}/, feature), this.name));
+  if (this.config.structure.type === 'feature')
+    this.testTemplate(testTemplate, path.join(this.config.test.fullPath.replace(/\{\{feature\}\}/, path.join(feature, this.config[componentType].path)), 'spec', this.name));
+  else
+    this.testTemplate(testTemplate, path.join(this.config.test.fullPath, 'spec', this.config[componentType].path, this.name));
   if (!skipAdd) {
-    this.addScriptToIndex(path.join(targetDirectory, this.name));
+    this.addScriptToIndex(path.join(this.config[componentType].appPath.replace(/\{\{feature\}\}/, feature), this.name));
   }
 };
