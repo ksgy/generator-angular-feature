@@ -6,18 +6,14 @@ var angularUtils = require('../util.js');
 var Config = require('../config.js');
 var Feature = require('../feature.js');
 
-
 var Generator = module.exports = function Generator() {
   ScriptBase.apply(this, arguments);
 
   // Get configuration
-  if (typeof(this.options['config']) === 'undefined')
-    this.configObj = Config.getConfig({
-      path: '',
-      file: 'config.json'
-    });
-  else
-    this.configObj = this.options['config'];
+  this.configObj = this.options['config'] || Config.getConfig({
+    path: '',
+    file: 'config.json'
+  });
 
   this.featureParams = Feature.getParameters(this.name, this.config.common.path);
   this.name = this.featureParams.basename;
@@ -51,7 +47,7 @@ Generator.prototype.rewriteAppJs = function () {
     ),
     needle: '.otherwise',
     splicable: [
-      "  templateUrl: '" + this.configObj.view.appPath.replace(/\{\{feature\}\}/, this.featureParams.dirname) + "/" + this.name.toLowerCase() + ".html'" + (coffee ? "" : "," ),
+      "  templateUrl: '" + Feature.getFullPath(this.configObj.view.appPath, this.featureParams.dirname) + "/" + this.name.toLowerCase() + ".html'" + (coffee ? "" : "," ),
       "  controller: '" + this.classedName + "Ctrl'"
     ]
   };

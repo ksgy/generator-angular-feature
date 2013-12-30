@@ -4,6 +4,7 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var angularUtils = require('./util.js');
 var Config = require('./config.js');
+var Feature = require('./feature.js');
 
 var Generator = module.exports = function Generator() {
   yeoman.generators.NamedBase.apply(this, arguments);
@@ -124,12 +125,12 @@ Generator.prototype.generateSourceAndTest = function (appTemplate, testTemplate,
   if (this.generatorName.toLowerCase() === 'service') {
     this.cameledName = this.classedName;
   }
-  this.appTemplate(appTemplate, path.join(this.config[componentType].fullPath.replace(/\{\{feature\}\}/, feature), this.name));
+  this.appTemplate(appTemplate, path.join(Feature.getFullPath(this.config[componentType].fullPath, feature), this.name));
   if (this.config.structure.type === 'feature')
-    this.testTemplate(testTemplate, path.join(this.config.test.fullPath.replace(/\{\{feature\}\}/, path.join(feature, this.config[componentType].path)), 'spec', this.name));
+    this.testTemplate(testTemplate, path.join(Feature.getFullPath(this.config.test.fullPath, path.join(feature, this.config[componentType].path)), 'spec', this.name));
   else
     this.testTemplate(testTemplate, path.join(this.config.test.fullPath, 'spec', this.config[componentType].path, this.name));
   if (!skipAdd) {
-    this.addScriptToIndex(path.join(this.config[componentType].appPath.replace(/\{\{feature\}\}/, feature), this.name));
+    this.addScriptToIndex(path.join(Feature.getFullPath(this.config[componentType].appPath, feature), this.name));
   }
 };

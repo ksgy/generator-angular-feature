@@ -2,7 +2,8 @@
 var path = require('path');
 
 module.exports = {
-  getParameters: getParameters
+  getParameters: getParameters,
+  getFullPath: getFullPath
 };
 
 function getParameters(componentName, defaultFeatureName) {
@@ -18,4 +19,8 @@ function getParameters(componentName, defaultFeatureName) {
   };
 
   return parameters;
+}
+
+function getFullPath(fullPath, dirname) {
+  return fullPath.replace(/\{\{feature\}\}/, dirname);
 }

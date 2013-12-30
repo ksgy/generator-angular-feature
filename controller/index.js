@@ -4,18 +4,14 @@ var ScriptBase = require('../script-base.js');
 var Config = require('../config.js');
 var Feature = require('../feature.js');
 
-
 var Generator = module.exports = function Generator() {
   ScriptBase.apply(this, arguments);
 
   // Get configuration
-  if (typeof(this.options['config']) === 'undefined')
-    this.config = Config.getConfig({
-      path: '',
-      file: 'config.json'
-    });
-  else
-    this.config = this.options['config'];
+  this.config = this.options['config'] || Config.getConfig({
+    path: '',
+    file: 'config.json'
+  });
 
   this.featureParams = this.options['featureParams'] ||
       Feature.getParameters(this.name, this.config.common.path);

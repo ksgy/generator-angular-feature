@@ -2,19 +2,23 @@
 var util = require('util');
 var ScriptBase = require('../script-base.js');
 var fs = require('fs');
+var path = require('path');
 var Config = require('../config.js');
+var Feature = require('../feature.js');
 
 var Generator = module.exports = function Generator(args, options) {
   ScriptBase.apply(this, arguments);
 
   // Get configuration
-  if (typeof(this.options['config']) === 'undefined')
-  this.config = Config.getConfig({
+  this.config = this.options['config'] || Config.getConfig({
     path: '',
     file: 'config.json'
   });
-  else
-    this.config = this.options['config'];
+    
+  this.featureParams = this.options['featureParams'] ||
+      Feature.getParameters(this.name, this.config.common.path);
+  this.name = this.featureParams.basename;
+  this.fullPath = Feature.getFullPath(this.config.decorator.fullPath, this.featureParams.dirname);
 
   this.fileName = this.name;
 };
@@ -25,7 +29,7 @@ Generator.prototype.askForOverwrite = function askForOverwrite() {
   var cb = this.async();
 
   // TODO: Any yeoman.util function to handle this?
-  var fileExists = fs.existsSync(this.env.cwd + path.join('/', this.config.source.fullPath) + buildRelativePath(this.fileName) + ".js");
+  var fileExists = fs.existsSync(buildRelativePath(path.join(this.fullPath, this.fileName)).toLowerCase() + ".js");
   if (fileExists) {
     var prompts = [{
       type: 'confirm',
@@ -69,10 +73,10 @@ Generator.prototype.askForNewName = function askForNewName() {
 };
 
 Generator.prototype.createDecoratorFiles = function createDecoratorFiles() {
-  this.appTemplate('decorator', buildRelativePath(this.fileName));
-  this.addScriptToIndex(buildRelativePath(this.fileName));
+  this.appTemplate('decorator', buildRelativePath(path.join(this.fullPath, this.fileName)));
+  this.addScriptToIndex(buildRelativePath(path.join(this.fullPath, this.fileName)));
 };
 
 function buildRelativePath(fileName){
-  return path.join(this.config.decorator.fullPath, fileName + "Decorator");
+  return fileName + "Decorator";
 }
