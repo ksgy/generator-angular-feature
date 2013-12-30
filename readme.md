@@ -8,9 +8,14 @@ Based on [generator-angular](https://github.com/yeoman/generator-angular/)
 
 ## Usage
 
-Install `generator-angular`:
+Clone `generator-angular-feature` repository:
 ```
-npm install -g generator-angular
+git clone https://github.com/codigo-pl/generator-angular-feature.git
+```
+
+`cd` into created directory and link generator:
+```
+cd generator-angular-feature && npm link
 ```
 
 Make a new directory, and `cd` into it:
@@ -18,9 +23,19 @@ Make a new directory, and `cd` into it:
 mkdir my-new-project && cd $_
 ```
 
-Run `yo angular`, optionally passing an app name:
+Run `yo angular-feature:config` to generate a config file
 ```
-yo angular [app-name]
+yo angular-feature:config
+```
+
+Edit `config.json` file to customize paths and project structure
+```
+vim config.json
+```
+
+Run `yo angular-feature`, optionally passing an app name
+```
+yo angular-feature [app-name]
 ```
 
 Run `grunt` for building and `grunt serve` for preview
@@ -30,8 +45,8 @@ Run `grunt` for building and `grunt serve` for preview
 
 Available generators:
 
-* [angular-feature](#app) (aka [angular-feature:app](#app))
 * [angular-feature:config](#config)
+* [angular-feature](#app) (aka [angular-feature:app](#app))
 * [angular-feature:controller](#controller)
 * [angular-feature:directive](#directive)
 * [angular-feature:filter](#filter)
@@ -41,18 +56,11 @@ Available generators:
 * [angular-feature:factory](#service)
 * [angular-feature:value](#service)
 * [angular-feature:constant](#service)
-* [angular-feature:decorator] (#decorator)
+* [angular-feature:decorator](#decorator)
 * [angular-feature:view](#view)
 
 **Note: Generators are to be run from the root directory of your app.**
 
-### App
-Sets up a new AngularJS app, generating all the boilerplate you need to get started. The app generator also optionally installs Twitter Bootstrap and additional AngularJS modules, such as angular-resource (installed by default).
-
-Example:
-```bash
-yo angular-feature
-```
 ### Config
 Creates a config file with choosen application structure in the root directory of your app.
 
@@ -179,10 +187,10 @@ or config.json (division by feature):
           "view": {
             "path": "views"
           }
-        },
-        "vendor": {
-          "path": "vendor"
         }
+      },
+      "vendor": {
+        "path": "vendor"
       }
     }
   }
@@ -192,6 +200,14 @@ or config.json (division by feature):
 Path value within a square brackets is a reference, e.g. path for 'factory' component will be 'services'.
 Path value '{{feature}}' is replaced by a feature name during execution of subgenerator (e.g. angular-feature:controller) or by a 'common' value, when no feature is given.
 Full path for the component is calculated based on nesting, e.g. 'app/src/{{feature}}/controllers' for a controller in a project divided by feature.
+
+### App
+Sets up a new AngularJS app, generating all the boilerplate you need to get started. The app generator also optionally installs Twitter Bootstrap and additional AngularJS modules, such as angular-resource (installed by default).
+
+Example:
+```bash
+yo angular-feature
+```
 
 ### Route
 Generates a controller and view, and configures a route in `app/scripts/app.js` connecting them.
