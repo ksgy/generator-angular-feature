@@ -201,7 +201,7 @@ Path value within a square brackets is a reference, e.g. path for 'factory' comp
 Path value '{{feature}}' is replaced by a feature name during execution of subgenerator (e.g. angular-feature:controller) or by a 'common' value, when no feature is given.
 Full path for the component is calculated based on nesting, e.g. 'app/src/{{feature}}/controllers' for a controller in a project divided by feature.
 
-1st example:
+Example 1:
 ```bash
 yo angular-feature:route foo/bar/myroute
 ```
@@ -218,7 +218,7 @@ Produces `app/src/foo/bar/views/myroute.html`:
 <p>This is the myroute view</p>
 ```
 
-2nd example:
+Example 2:
 ```bash
 yo angular-feature:route myroute
 ```
