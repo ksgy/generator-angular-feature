@@ -201,6 +201,30 @@ Path value within a square brackets is a reference, e.g. path for 'factory' comp
 Path value '{{feature}}' is replaced by a feature name during execution of subgenerator (e.g. angular-feature:controller) or by a 'common' value, when no feature is given.
 Full path for the component is calculated based on nesting, e.g. 'app/src/{{feature}}/controllers' for a controller in a project divided by feature.
 
+1st example:
+```bash
+yo angular-feature:route foo/bar/myroute
+```
+
+Produces `app/src/foo/bar/controllers/myroute.js`:
+```javascript
+angular.module('myMod').controller('MyrouteCtrl', function ($scope) {
+  // ...
+});
+```
+
+Produces `app/src/foo/bar/views/myroute.html`:
+```html
+<p>This is the myroute view</p>
+```
+
+2nd example:
+```bash
+yo angular-feature:route myroute
+```
+
+Produces `app/src/common/controllers/myroute.js` and `app/src/common/views/myroute.html`.
+
 ### App
 Sets up a new AngularJS app, generating all the boilerplate you need to get started. The app generator also optionally installs Twitter Bootstrap and additional AngularJS modules, such as angular-resource (installed by default).
 
