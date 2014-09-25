@@ -1,3 +1,12 @@
 node_modules
 test/temp
 test/UpperCaseBug
+bower_components
+.tmp
+dist
+*.zip
+.DS_Store
+.svn/
+*.sublime-project
+*.sublime-workspace
+screenshot_*.png
